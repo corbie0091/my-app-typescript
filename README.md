@@ -1,46 +1,29 @@
-# Getting Started with Create React App
+## Yarn패키지 적용하기
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- 성능 / 속도 측면에서 npm보다 유리하기떄문에 적용함
+- yarn init 해서 관련 코드 입력
+- yarn 해서 yarn.lock생성
+- package lock json 파일 삭제( npm과 yarn 파일이 겹쳐 삭제하라는 문구가 떳기 때문)
 
-## Available Scripts
+## Prettier, ESLint 설치하기
 
-In the project directory, you can run:
+### Prettier ( formatter )
 
-### `npm start`
+- Prettier는 코드 포맷터(Code Formatter)로 우리가 작성한 코드를 가독성 좋게 만들어주는 확장 도구
+- 이 도구를 사용하면 여러 개발자들의 코드 스타일을 통일하여 균일한 코드 품질을 가질 수 있게 만들 수 있음
+  (코드 push, merge시에) 엄청난 변경을 불러일으킬 수 있기에 그런 오류를 잡으려고 설치해야함
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+[설치]
+yarn add --dev prettier
+npm install -D prettier
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### ESLint (정적 분석 도구)
 
-### `npm test`
+ESLint는 ES(ECMAScript)와 Lint의 합성어로, 자바스크립트를 분석하여 오류나 버그를 찾는데 도움을 주는 정적 분석 도구
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+[설치]
+yarn add --dev eslint eslint-config-prettier eslint-plugin-prettier
+npm install -D eslint eslint-config-prettier eslint-plugin-prettier
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- eslint-config-prettier : eslint에서 prettier와 충돌할 수 있는 rule을 끔(우리는 prettier를 쓸거기때문에 여기서의 formatter를 꺼버려서 충돌을 방지하는 것임)
+- eslint-plugin-prettier : prettier를 eslint의 rules로 동작(느려서 비추한다는 의견도 있긴함)

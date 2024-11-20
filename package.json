@@ -2,6 +2,10 @@
   "name": "my-app-typescript",
   "version": "0.1.0",
   "private": true,
+  "description": "My App Typescript Project (Typescript)",
+  "repository": "https://github.com/corbie0091/my-app-typescript.git",
+  "author": "corbie0091 <corbie0091@gmail.com>",
+  "license": "MIT",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -39,5 +43,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint": "^9.15.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.3"
   }
 }
