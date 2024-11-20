@@ -156,7 +156,7 @@ export const Hello = ({name, color = 'blue'}: Props) => {
 }
 ```
 
-## Props2
+## Props 실전코드
 
 - Hello.tsx , Hello2.tsx참고
 
@@ -204,3 +204,55 @@ const Container = styled.div<ContainerProps>`
 - 지금은 쪼개서 쓸 수 있고, 스타일에도 props를 사용할 수 있구나 정도로만
   이해하면 됨
 - 만약 글로벌하게 스타일을 관리하겠다해서 파일을 분리할 때 활용할 가치가 있음
+
+## State
+
+- State는 리액트에서 이벤트에 의해 변경되는 동적인 값을 의미
+- 한 컴포넌트 안에서 유동적인 데이터를 다룰 때 사용되며 컴포넌트 안에서 데이터를
+  변경할 수 있음
+- Props는 부모 컴포넌트가 설정하는 값으로 일기 전용으로만 사용했지만,
+- State는 하위 컴포넌트에서도 데이터를 변경할 수 있는 특징이 있음
+- State를 사용하기 위해서는 useState라는 Hook을 사용
+
+### State사용법
+
+- useState의 코드는 아래와 같은 형식으로 만들어짐
+
+```
+const [state, setState] = useState(initialState);
+const [message, setMessage] = useState('');
+```
+
+- 여기서 'setState'는 setter함수이므로 다른 곳에서 호출하여 state값을 변경할 때
+  사용
+
+-[예제]
+
+```
+const onChange = ( e: React.ChangeEvent<HTMLInputElement>): void => {
+  setState(e.target.value);
+}
+```
+
+- e는 이벤트라는 객체를 받아서 setState를 호출해서 입력하는 값들을 받아
+  state값을 e.target.value값으로 변경해라는 뜻으로 진행 됨
+
+## State 실전코드
+
+- StateComponent1,2 .tsx 참고
+- useState어떻게 동작하는지 참고
+- 물론 새로고침하면 없어짐
+
+### 응용
+
+- PropsAndState.tsx참고
+- 이는 컴포넌트인 Button폴더와 Label폴더의 index.tsx를 import받아서 설정했다.
+
+- setState가 설정되어 있는 함수까지도 props로 넘겨서 사용할 수 있다는 점이
+  포인트임.
+- 앞으로 컴포넌트를 잘게잘게 쪼개는 연습이 필요함
+- 버튼도 2개가 필요한데 하나의 컴포넌트로 재사용을 하고 있다는 점이 포인트.
+- 데이터를 조회하는 페이지도 -조회하는 영역, - 기간설정 - 검색 -초기화 -표
+  이런것들을 찍어내야한다면 컴포넌트들을 재사용할 수 있는 구조들을
+  만들어야하므로
+- 이런식으로 structure를 나눠보는 연습이 필요함

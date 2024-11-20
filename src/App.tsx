@@ -1,7 +1,7 @@
-import Hello from './Hello';
+import { PropsAndState } from './example/PropsAndState';
 
 function App() {
-  return <Hello name={'MY APP TYPESCRIPT'}></Hello>;
+  return <PropsAndState />;
 }
 
 export default App;
