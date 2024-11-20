@@ -250,9 +250,122 @@ const onChange = ( e: React.ChangeEvent<HTMLInputElement>): void => {
 
 - setState가 설정되어 있는 함수까지도 props로 넘겨서 사용할 수 있다는 점이
   포인트임.
-- 앞으로 컴포넌트를 잘게잘게 쪼개는 연습이 필요함
+- [앞으로..] 컴포넌트를 잘게잘게 쪼개는 연습이 필요함
 - 버튼도 2개가 필요한데 하나의 컴포넌트로 재사용을 하고 있다는 점이 포인트.
 - 데이터를 조회하는 페이지도 -조회하는 영역, - 기간설정 - 검색 -초기화 -표
   이런것들을 찍어내야한다면 컴포넌트들을 재사용할 수 있는 구조들을
   만들어야하므로
 - 이런식으로 structure를 나눠보는 연습이 필요함
+
+## Context API
+
+### 기존 Props의 문제점(Props drilling)
+
+계층적으로 내려가는 컴포넌트의 구조상 해당 prop이 필요없음에도 자식 컴포넌트에게
+전해주기 위해 가지고있는 경우가 발생
+
+- Component1 > Component2 > Component3
+- 1에서 데이터가 생성이되고 3에서 사용을한다면 2에서(중간 컴포넌트)는 drilling이
+  발생하게 됨
+- 또 name이라는 props를 age로 바꾸게 되는 경우에 모든 컴포넌트의 코드를
+  수정해야하므로 불편함
+
+### 해답: Context
+
+리액트에서 Context는 컴포넌트에게 Props를 사용하지 않고 필요한 데이터를 넘겨줄
+수 있게하는 기능
+
+- 대표적인 사용 예시 테마 설정(ex. 다크 모드), 언어 설정 등 ( 어떤 페이지에도
+  설정이 공통적으로 설정됨 )
+- Context Provider : Component1 > Context API (값을 넣어주는 컴포넌트)
+- Context Consumer : Component3 < Context API (값을 소비하는 컴포넌트)
+
+### Context 사용법
+
+1. Context를 사용하기 위해서는 아래와 같은 Context를 생성해야 함
+
+```
+const TodoContext = createContext<TodoListContextValueType> | undefined>(
+  undefined
+);
+```
+
+- createContext를 사용해서 생성해야함
+- ~Type으로 객체를 정의해주고 정의 되어있는 structure, 값들을 context에
+  담을거야라는 것임
+
+2. Context에서 제공하는 Provider를 사용하는 컴포넌트 생성
+
+```
+export const TodoProvider = (props: Props) => {
+  // ...(중간 생략)
+
+  return (
+    <TodoContext.Provider value={value}>{props.children}></TodoContext.Provider>
+  )
+}
+```
+
+- 위에서 create한 TodoContext로 Provider로 컴포넌트를 생성하게 됨
+- 컴포넌트만드는 방식과 동일
+- 안에 뭐가 들어갈지 모르기떄문에 props.children 이런식으로 구성하게 됨
+- children안에 객체를 넣어도 됨 - 실전 코드 참고
+
+3. 해당 Context를 사용하는 컴포넌트들의 상단에 Provider 컴포넌트를 씌워야함
+
+```
+export const ContextExample = () => {
+  return (
+    <CountProvider>
+      <CountLabel />
+      <PlusButton>
+    </CountProvider>
+  )
+}
+```
+
+- Context가 적용되어있는 Provider컴포넌트를 씌워줘야함
+
+4. 실제 Context의 값을 사용하는 곳에서 useContext를 활용하여 가져다 사용함
+
+```
+export const CountLabel = () => {
+  const {count} = useContext(CountContext);
+  return<div>{count}</div>
+}
+```
+
+- Provider에서 정의되어있는 값이나 함수들을 사용할 수 있게 됨 ( 처음 정의했던
+  type쪽에서 정의한 것들을 사용할 수 있음 )
+- 구조 분해해서 필요한 것만 땡겨올 수도 있고
+- value전체를 끌어와 탐색해서 쓸 수도 있음
+
+### Context주의사항
+
+Context API를 사용할떄 값이 변경될 때마다 하위 컴포넌트들이 다시 랜더링되므로
+성능에 영향을 줄 수 밖에 없음
+
+- 아무래도 부모컴포넌트다 보니까 하위 컴포넌트들이 영향을 받을 수 밖에 없음
+- 규모가 크지 않다면 크게 영향을 안 줄 수 있긴함
+- [물론_해결방안은_있음]
+- dispatch와 state를 구분해서 context를 2개로 쪼개는 방식
+- 랜더링을 최소화 하기위해서 제한하는 방식있음
+
+## Context API 실전 코드
+
+### NonContext.tsx > GrandParent > Parent > Child > GrandChild
+
+- props가 다 건너와야하는 불편함을 보여줌
+- 하위 컴포넌트에 넘겨주기위해서 이렇게 불편하게 작업되어 있다.
+- 만약 GrandChild에서의 interface에 있는 value부분을 age로 변경했을시에 각각의
+  컴포넌트의 value부분을 다 바꿔주어야하는 상황이 발생하게 됨
+- 타입스크립트는 다 체크해야하므로 간단한 props에서의 값이나 타입을 변경하므로
+  인해 모든 파일의 변경이 발생될 수 있음
+- 동료들과의 협업에서도 불편한 상황이 발생함
+- 이런 케이스가 props를 사용하면 안되는 케이스임
+- 물론 실무에서는 이정도면 ,, 할만함
+
+### ContextExample , Context2
+
+- Context가 어떻게 되는지 관계파악 (시간 오래걸릴듯..)
+- [Q] 남은 버튼 구현(삭제버튼, boolean값 변경버튼)

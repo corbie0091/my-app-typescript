@@ -1,7 +1,7 @@
-import { PropsAndState } from './example/PropsAndState';
+import { Context2 } from './example/Context/Context2';
 
 function App() {
-  return <PropsAndState />;
+  return <Context2 />;
 }
 
 export default App;
