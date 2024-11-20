@@ -105,3 +105,102 @@ eslint.config.mjs ( 이전 eslitrc.js와 유사)
 - [참고] @emotion/styled로 같이 설치하면 styled-component사용과 이질감이 없다
 
 - [Q] App.css 를 삭제하고 관련 부분들을 App.tsx에 styled설정을 해보자
+- [참고] 이후 yarn format 명령어로 정리 해주면 된다.
+
+## Props
+
+- Props는 properties의 줄임말로 컴포넌트에 어떤 값을 넘겨주기 위해 사용됨
+- 이를 통해 부모 컴포넌트가 자식 컴포넌트에게 데이터를 전달할 수 있음
+- 다만 자식 컴포넌트의 입장에서는 전달받은 값이기 떄문에 수정이 불가능하다는
+  특징이 있음
+
+- [TypeScript]
+- ex)
+
+```
+interface Props {
+  name: string;
+  color: string
+}
+
+export conmst Hello = {{name, color}: Props => {
+  return <div style={{color}}>Hello {name}</div>
+}}
+```
+
+- 그리고 실제 컴포넌트를 가져다 사용할 땐, 아래와 같이 Props에 넘겨줄 값을
+  보내주면 됨.
+
+```
+import Hello from './Hello'
+
+function App() {
+  return <Hello name={'MY APP TYPESCRIPT'} color={'red'}></Hello>
+}
+export default App
+```
+
+### Optional Props
+
+만약 Optional하게 사용되는 props를 설정해야 한다면 ?를 사용 interface Props {
+name: string; color?: string; }
+
+### Default Props
+
+만약 Optional하게 사용되는 props의 값을 참조했을 경우. 값이 없다면 기본값을
+지정하여 사용할 수 있음
+
+```
+export const Hello = ({name, color = 'blue'}: Props) => {
+  return <div style={{ color }}> Hello {name}</div>
+}
+```
+
+## Props2
+
+- Hello.tsx , Hello2.tsx참고
+
+```
+export const Hello = ({ name = 'flature', color = 'blue' }: Props) => {
+  return <div style={{ color }}>Hello {name}</div>;
+};
+```
+
+```
+function Hello({ name, color }: Props) {
+    return <div style={{ color }}>Hello {name}</div>;
+  }
+```
+
+- 는 같은 구조이다 . -> 하지만 앞으로는 const 변수로 정의하는 컴포넌트에
+  익숙해질 필요가 있다.
+
+```(App.jsx)
+function App() {
+  return <Hello name={'MY APP TYPESCRIPT'} ></Hello>;
+}
+```
+
+- color 속성을 지우고 컴파일하면 error가 발생함
+- [참고]하지만 그전에 {}에 빨간줄이 그어지면서 안된다는 것을 미리 알 수 있음
+- interface의 color에 Optional설정을 함으로써 null값이 넘어가게되고, 이는 color
+  속성이 기본값으로 설정할 수 있게됨
+
+### Emotion의 스타일 컨테이너 적용 in Hello2.tsx
+
+```(Hello2.tsx에서 추가된 부분)
+interface ContainerProps {
+  color: string;
+}
+
+const Container = styled.div<ContainerProps>`
+  color: ${(props) => props.color};
+`;
+```
+
+- Hello.tsx 와 Hello2.tsx는 동일한 동직을 해서 같아보이지만 구분하는 이유가
+  있다.
+- [Why] 인터페이스들이 분리될 수 있음( 파일로)
+- 지금은 쪼개서 쓸 수 있고, 스타일에도 props를 사용할 수 있구나 정도로만
+  이해하면 됨
+- 만약 글로벌하게 스타일을 관리하겠다해서 파일을 분리할 때 활용할 가치가 있음
