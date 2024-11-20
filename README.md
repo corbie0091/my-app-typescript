@@ -16,7 +16,7 @@
   가질 수 있게 만들 수 있음 (코드 push, merge시에) 엄청난 변경을 불러일으킬 수
   있기에 그런 오류를 잡으려고 설치해야함
 
-[설치] yarn add --dev prettier npm install -D prettier
+- [설치] yarn add --dev prettier npm install -D prettier
 
 ### Prettier설정
 
@@ -31,7 +31,7 @@
 5. 터미널에 yarn format:fix 입력
 6. "" => ''으로 바뀌는 등의 prettier가 적용된 모습확인 가능
 
-[참고]CRLF 와 LF차이의 이해
+#### [참고]CRLF 와 LF차이의 이해
 
 - CRLF는 둘다 쓰겠다는 의미 , 줄바꿈에대한 정의가 운영체제마다 조금씩 다른
   것들이 있음
@@ -41,9 +41,10 @@
 ESLint는 ES(ECMAScript)와 Lint의 합성어로, 자바스크립트를 분석하여 오류나 버그를
 찾는데 도움을 주는 정적 분석 도구
 
-[설치] yarn add --dev eslint eslint-config-prettier eslint-plugin-prettier npm
-install -D eslint eslint-config-prettier eslint-plugin-prettier [주의]
-eslint-plugin-prettier는 프로젝트에 설치하지 않음
+- [설치] yarn add --dev eslint eslint-config-prettier eslint-plugin-prettier npm
+  install -D eslint eslint-config-prettier eslint-plugin-prettier
+
+- [주의] eslint-plugin-prettier는 프로젝트에 설치하지 않음
 
 - eslint-config-prettier : eslint에서 prettier와 충돌할 수 있는 rule을 끔(우리는
   prettier를 쓸거기때문에 여기서의 formatter를 꺼버려서 충돌을 방지하는 것임)
@@ -54,8 +55,9 @@ eslint-plugin-prettier는 프로젝트에 설치하지 않음
 
 npx eslint --init > Enter키입력 > 방향키+Enter로 설정진행 > problems ,
 javascript module , react, typescript, browser, Yes, yarn, > 설치완료. 이후
-eslint.config.mjs ( 이전 eslitrc.js와 유사) [참고]rules에 필요한 룰이 있다면
-적용시키면 된다.
+eslint.config.mjs ( 이전 eslitrc.js와 유사)
+
+- [참고]rules에 필요한 룰이 있다면 적용시키면 된다.
 
 #### 추가 작업 in eslint.config.mjs
 
@@ -67,5 +69,39 @@ eslint.config.mjs ( 이전 eslitrc.js와 유사) [참고]rules에 필요한 룰�
 - 이후 script에 추가 -- "lint": "eslint ./src", -- "lint:fix": "eslint --fix
   ./src"
 
-  이렇게 해서 yarn lint > yarn lint:fix로 수정해주면 된다. [참고]fix를 했을때도
-  수정이 안되면 직접 찾아서 수정
+  이렇게 해서 yarn lint > yarn lint:fix로 수정해주면 된다.
+
+  - [참고]fix를 했을때도 수정이 안되면 직접 찾아서 수정
+
+## Emotion 적용하기
+
+- 리액트에서 컴포넌트의 스타일을 적용하는 방식
+- CSS in CSS
+- CSS in JS
+
+1. CSS in CSS
+
+- 리액트 컴포넌트 별로 CSS파일을 갖는 형식으로 스타일을 관리
+- CSS Module
+- 별도의 자바스크립트 전환이 필요 없어 속도가 빠름
+
+2. CSS in JS
+
+- 자바스크립트 내에서 css를 작성하는 방식
+- 대표적으로 styled-component, emotion등이 있음
+- 현재 사용 중인 스타일만 DOM에 포함시킬 수 있음
+- 별도 패키지를 설치하기 때문에 용량이 증가한다 ( 스크립트 전환이 필요하여
+  속도도 다소 느려진다.)
+
+### Emotion
+
+- Emotion은 CSS-in-JS 라이브러리 중 하나
+
+- vs styled-component ?? 큰 차이가 없다
+- styled-component는 한국에서 많이 사용
+- emotion은 global 하면서도 개발친화적이다는 평이 많음
+
+- [설치] yarn add @emotion/react @emotion/styled
+- [참고] @emotion/styled로 같이 설치하면 styled-component사용과 이질감이 없다
+
+- [Q] App.css 를 삭제하고 관련 부분들을 App.tsx에 styled설정을 해보자
