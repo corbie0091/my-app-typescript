@@ -591,3 +591,146 @@ const Content = styled.div`
 - minmax(250px, 1fr) : 각 열의 최소 너비는 "250px"이고, 최대 너비는 "1fr"이다
 - "1fr"은 남은 가로 공간을 균등하게 나눈다.
 - 화면이 작아지면 열의 너비가 "250px" 이하로 줄어들지 않고, 더 작아질 경우 다음 행으로 넘치게 된다.
+
+## 라우터(Router)
+
+### 라우트(Route)
+- 사용자가 URL을 통해 페이지를 접근할 경우 URL에 따라 다른 컴포넌트를 보여주기 위해 라우팅(Routing)가능을 사용
+- 리액트에서는 일반적으로 react-router 패키지를 사용하여 구현
+- 이 라이브러리를 통해 브라우저의 "뒤로 가기 /앞으로 가기"등의 기능을 제공할 수 있음
+- 만약 서버 사이트 랜더링(SSR)방식으로 구현한다면 Next.js를 통해 해당 기능을 구현할 수도 있음
+[참고] 현 프로젝트에서는 클라이언트 사이드 렌더링(CSR)을 사용중
+
+### 설치방법 
+- 아래와 같이 yarn을 통해 패키지를 설치할 수 있음(react-router 6버전)
+```
+yarn add react-router-dom@6
+```
+
+- 만약 다른 사유로 인해 6버전 아래의 패키지를 설치해야할 경우 '@types/react-router-dom'도 설치해야함
+- 지금은 교육용이니까 6버전을 사용하는데 
+- 기존 프로젝트가 있고 여기에 라우터를 적용하고싶은데 6버전이 호환이 안되어 6버전 아래인 5버전 정도를 설치해야 한다면 밑의 코드까지 같이 설치해줘야한다.
+- 6버전부터는 자동으로 설치되는 부분이기 때문.
+```
+yarn add react-router-dom @types/react-router-dom
+```
+
+### 사용방법
+- 최상단에 <BrowserRouter>컴포넌트를 씌움
+```
+import { BrowserRouter } from 'react-router-dom';
+
+const root = ReactDOM.createRoot(
+  document.getElementById('root')as HTMLElement
+);
+root.render(
+  <React.StrictMode>
+    <BrowserRouter> 
+      <App />
+    </BrowserRouter> 
+  </React.StrictMode>
+)
+```
+- App컴포넌트 바깥쪽에 씌워줌으로써 전역적으로 라우터기능을 사용할 것을 선언함
+
+- <Routes>컴포넌트와 <Route>컴포넌트를 사용하여 라우트를 설정
+```
+function App() {
+  return (
+    <Layout>
+      <Routes>
+        <Route path="/" element={<Home />}>
+        <Route path="/about" element={<About />}>
+        <Route path="/example1" element={<Example1 />}>
+        <Route path="/example2" element={<Example2 />}>
+        <Route 
+          path="/"
+          element={
+            <>
+              <NotFound>
+                404 <br /> NOT FOUND
+              </NotFound>
+            </>
+          }>
+      </Routes>
+    </Layout>
+  )
+}
+``` 
+- 라우팅 셋팅
+- Routes 안에 Route를 넣음 
+- path와 element 속성을 사용 
+- path에는 경로를 설정
+- element에는 컴포넌트를 배치 
+
+### 사용 방법 - Link
+Home에서 다른 path로 어떻게 이동할 것인가??
+메뉴를 눌렀을 때 페이지를 이동시키기 위한 방법을 여기서 제공하고 있음
+- react-router에서 제공하는 <Link> 컴포넌트를 사용하여 페이지를 이동할 수 있게 링크를 추가
+```
+const MenuLink = styled(Link)`
+  color: #333;
+  text-decoration: none;
+  font-size: 18px;
+
+  &:hover {
+    color: #4285f4;
+  }
+`;
+```
+
+```
+  <MenuItem>
+    <MenuLink to="/">Home</MenuLink>
+  </MenuItem>
+  <MenuItem>
+    <MenuLink to="/about">About</MenuLink>
+  </MenuItem>
+  <MenuItem>
+    <MenuLink to="/example1">Example1</MenuLink>
+  </MenuItem>
+  <MenuItem>
+    <MenuLink to="/example2">Example2</MenuLink>
+  </MenuItem>
+```
+- 기존에는 href로 경로를 설정했었음 
+- to 로 바뀌고 to 쪽에 path를 입력함 
+- 메뉴 링크들을 클릭하면 페이지로 이동하겠구나 짐작이 가능함
+- 흔히 사용하는 a태그를 대체해주는 Link태그
+
+### 사용방법 - useNavigate
+useNavigate도 화면을 넘기는 기능 - 페이지 이동이 가능
+link와 비슷 - 하나의 컴포넌트로서 기능
+useNavigate는 훅으로서 기능
+- react-router에서 제공하는 useNavigate 훅을 사용하여 페이지를 이동할 수있게 링크를 추가
+```
+const navigate = useNavigate();
+const handleClick = () => {
+  navigate("/")
+  scrollToTop();
+}
+```
+```
+  <button onClick={handleClick}>go home</button>
+```
+- 조건문으로 동적으로 활용해볼 수있는 경우가 있음 
+- button으로 함수를 호출하면서 navigate함수 호출 => 사이트 이동이 가능해짐
+
+### Link와 useNavigate
+Link 컴포넌트
+- Link 컴포넌트는 a 태그를 대신하여 클라이언트 측 라우팅을 위해 사용
+- 이전에는 사이트 이동시 새로고침하면 데이터가 없어지는 경우도 있었음
+- 사용자가 해당 링크를 클릭하면, 브라우저는 페이지를 새로 고치지 않고도 React Router가 관리하는 URL로 이동
+
+useNavigate훅
+- useNavigate 훅은 함수 컴포넌트 내부에서 프로그래밍 방식으로 라우터를 제어
+- 주로 이벤트 핸들러나 조건부 또는 비동기적인 상황에서 특정 URL로 이동해야할 경우 사용
+- useNavigate 훅은 사용자의 액선을 기다리지 않고 바로 URL을 변경할 수 있음
+
+## 라우터(Router) 실습코드 
+- BrowserRouter 설정으로 전역적인 설정 해준다.
+- Link태그로 경로를 설정해준다.
+
+- [Q] NavLink 컴포넌트를 통해 액티브상태 체크가능 - 현제 페이지 위치 UX개선필요 
+- Example2 > button > navigate("/") 메서드 이용해보기
+- scrollToTop 메서드 참고 

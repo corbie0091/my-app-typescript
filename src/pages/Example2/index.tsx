@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { useNavigate } from 'react-router-dom';
 const Container = styled.section`
   padding: 20px;
 `;
@@ -25,7 +26,22 @@ const Image = styled.img`
 const Text = styled.p`
   font-size: 16px;
 `;
+
+const scrollToTop = () => {
+  // 페이지 이동 및 스크롤 맨 위로 이동
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
+};
+
 export const Example2 = () => {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate('/'); //클릭시 홈화면으로 이동하라는 것.
+    scrollToTop(); // 페이지 전환시 스크롤을 맨 위로 올려줌
+  };
+
   return (
     <Container>
       <Title>Example 2</Title>
@@ -39,6 +55,7 @@ export const Example2 = () => {
             Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
             nisi ut aliquip ex ea commodo consequat.
           </Text>
+          <button onClick={handleClick}>go home</button>
         </Card>
         <Card>
           <Image
