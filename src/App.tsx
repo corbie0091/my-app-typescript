@@ -1,7 +1,12 @@
-import { Context2 } from './example/Context/Context2';
+import { Layout } from './layouts/MainLayout';
+import { Example1 } from './pages/Example1';
 
 function App() {
-  return <Context2 />;
+  return (
+    <Layout>
+      <Example1 />
+    </Layout>
+  );
 }
 
 export default App;

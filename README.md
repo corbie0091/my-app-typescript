@@ -369,3 +369,225 @@ Context API를 사용할떄 값이 변경될 때마다 하위 컴포넌트들이
 
 - Context가 어떻게 되는지 관계파악 (시간 오래걸릴듯..)
 - [Q] 남은 버튼 구현(삭제버튼, boolean값 변경버튼)
+
+## 레이아웃(Layout)
+
+일반적인 페이지는 
+Header, Menu(Option), SideBar(Option), Content, Footer로 구성 ( 유튜브 홈페이지 )
+
+- 보통 Content만 바뀌는 경우가 많음 => 이럴때 레이아웃을 만들게 됨
+
+### Layout구성하기
+- Header 컴포넌트 생성
+```
+export const Header = () => {
+  return (
+    <Container>
+      <Logo src='https://via.placeholder.com/150' alt='Logo' />
+      <Nav>
+        <NavLink href="#">Home</NavLink>
+        <NavLink href="#">About</NavLink>
+        <NavLink href="#">Services</NavLink>
+        <NavLink href="#">Contact</NavLink>
+      </Nav>
+    </Container>
+  )
+}
+
+export const Footer = () => {
+  return (
+    <FooterContainer>
+      <FooterText>Copy 2024 MY APP TYPESCRIPT. All rights reserved.</FooterText>
+      <div>
+        <SocialMediaLink href="#">Facebook</SocialMediaLink>
+        <SocialMediaLink href="#">X</SocialMediaLink>
+        <SocialMediaLink href="#">Instagram</SocialMediaLink>
+      </div>
+    </FooterContainer>
+  )
+}
+
+export const Sidebar = () => {
+  return (
+    <Container>
+      <Menu>
+        <MenuItem>
+          <MenuLink href="#">Home</MenuLink>
+        </MenuItem>
+        <MenuItem>
+          <MenuLink href="#">About</MenuLink>
+        </MenuItem>
+        <MenuItem>
+          <MenuLink href="#">Services</MenuLink>
+        </MenuItem>
+        <MenuItem>
+          <MenuLink href="#">Contact</MenuLink>
+        </MenuItem>
+      </Menu>
+      <Info>
+        <InfoTitle>Follow Us</InfoTitle>
+        <InfoText>Stay connected with us</InfoText>
+      </Info>
+    </Container>
+  )
+}
+
+export const Example1 = () => {
+  return (
+    <Container>
+      <Title>Example 1</Title>
+      <Content>
+        <Card>
+          <Image
+            src="https://via.placeholder.com/250'
+            alt="Placeholder Image"
+          />
+          <Text>Lolen ipsum dolor sit sart, wfsocneerrcqw qwwr elit.</Text>
+        </Card>
+        <Card>
+          <Image
+            src="https://via.placeholder.com/250'
+            alt="Placeholder Image"
+          />
+          <Text>Lolem ipsum dolor sit sart, wfsocneerrcqw qwwr elit.</Text>
+        </Card>
+      </Content>
+    </Container>
+  )
+}
+```
+
+### Layout구성하기
+Layout 컴포넌트를 생성하여 앞서 생성한 컴포넌트를 조합
+- Container로 감싸면서 글로벌 규칙을 정해줄 수 있음 ( 이 컨테이너 안에서 )
+- props.children 으로 이 안에 어떠한 컴포넌트든 들어갈 수 있음을 명시
+- 전체적인 Layout을 정의함 위에는 헤더 옆에는  sidebar 밑에는 footer 가운데엔 content
+```
+export const Layout = (props: Props) => {
+  return (
+    <Container>
+      <Header />
+      <Content>
+        <Sidebar />
+        <Main>
+          {props.children}
+        </Main>
+      </Content>
+    </Container>
+  )
+}
+```
+
+- Content 사용부분
+- App.tsx파일안에서 
+- props.children안쪽으로 Example 1 컴포넌트가 들어가면서 우리가 말하고자하는 content 영역이 만들어짐
+```
+function App() {
+  return (
+    <Layout>
+      <Example1 />
+    </Layout>
+  )
+}
+```
+
+## Layout 실전 코드 
+- Header Footer Sidebar를 emotion스타일을 적용시킨 것을 사이트에서 확인
+- pages에서 변화되는 Component를 정의해놓음
+
+### Emotion 스타일링 라이브러리
+- styled 객체로 다양한 HTML태그를 커스텀 스타일 컴포넌트로 변환할 수 있다.
+- styled는 HTML뿐만 아니라 사용자 정의 React컴포넌트와도 함께 사용할 수 있다.
+
+1. 문서 구조 관련 태그
+- header
+- footer
+- section
+- article
+- aside
+- main
+- nav
+
+2. 텍스트 및 콘텐츠 태그
+- h1, h2, ..., h6
+- p
+- blockquote
+- span
+- strong
+- em
+- mark
+
+3. 폼 태그
+- input
+- textarea
+- button
+- select
+- label
+- fieldset
+- legend
+
+4. 리스트 태그
+- ul
+- ol
+- li
+- dl
+- dt
+- dd
+
+5. 테이블 태그
+- table
+- thead
+- tbody
+- tr
+- td
+- th
+
+6. 멀티미디어 태그
+- audio
+- video
+- canvas
+- picture
+- source
+
+7. 인터랙티브 및 SVG 관련 태그
+- svg
+- path
+- circle
+- rect
+- g
+
+8. 사용자 정의 React 컴포넌트에 styled 사용 
+- 사용자 정의 컴포넌트에도 styled를 사용할 수 있다.
+```
+import styled from '@emotion/styled';
+
+const CustomComponent = ({ className }) => (
+  <div className={className}>Hello Emotion</div>
+);
+
+const StyledCustom = styled(CustomComponent)`
+  color: red;
+  font-size: 20px;
+`;
+
+export default StyledCustom;
+```
+### 스타일 관련 사이트
+1. https://emotion.sh/docs/styled
+2. https://devdocs.io/emotion/
+3. https://css-tricks.com/emotion-a-css-in-js-library/
+4. https://developer.mozilla.org/en-US/docs/Web/HTML/Element
+
+[참고] pages > Example1 반응형으로 사이트가 작은화면-큰화면에서 바뀌는 원인코드
+```
+const Content = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 20px;
+`;
+```
+- auto-fit은 그리드 컨테이너의 가로 공간에 맞게 가능한 한 많은 열을 자동으로 생성
+- 화면 크기에 따라 카드(Card)의 열 개수를 동적으로 조정
+- minmax(250px, 1fr) : 각 열의 최소 너비는 "250px"이고, 최대 너비는 "1fr"이다
+- "1fr"은 남은 가로 공간을 균등하게 나눈다.
+- 화면이 작아지면 열의 너비가 "250px" 이하로 줄어들지 않고, 더 작아질 경우 다음 행으로 넘치게 된다.
